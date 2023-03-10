@@ -16,6 +16,7 @@ import com.example.carpark.exception.custom.NotFoundException;
 import com.example.carpark.repository.CarRepository;
 import com.example.carpark.repository.TicketRepository;
 import com.example.carpark.repository.TripRepository;
+import com.example.carpark.repository.custom.TicketCustomRepository;
 import com.example.carpark.service.TicketService;
 
 @Service
@@ -25,13 +26,15 @@ public class TicketServiceImpl implements TicketService {
   @Autowired
   private CarRepository carRepository;
   @Autowired
+  private TicketCustomRepository ticketCustomRepository;
+  @Autowired
   private TripRepository tripRepository;
   @Autowired
   private ModelMapper model;
 
   @Override
   public List<TicketDTO> getTicketList(String searchName, String field, int offset, int limit) {
-    List<Ticket> tickets = repository.findAll();
+    List<Ticket> tickets = ticketCustomRepository.getAllTickets("%" + searchName + "%", field, offset, limit);
     return tickets.stream().map(t -> model.map(t, TicketDTO.class)).collect(Collectors.toList());
   }
 
@@ -66,7 +69,7 @@ public class TicketServiceImpl implements TicketService {
   public void updateTicket(TicketCreationDTO dtoCreate, Long id) throws NotFoundException {
     Ticket ticket = repository.findById(id).orElseThrow(() -> new NotFoundException("Not Found Ticket"));
     // check whether trip is existed
-    if (dtoCreate.getTripId() != null)
+    if (ticket.getTrip() != null&&dtoCreate.getTripId() != null)
       tripRepository.findById(ticket.getTrip().getTripId()).orElseThrow(() -> new NotFoundException("Not Found trip"));
     // check whether car is null
     if (dtoCreate.getCarLicensePlate() != null)

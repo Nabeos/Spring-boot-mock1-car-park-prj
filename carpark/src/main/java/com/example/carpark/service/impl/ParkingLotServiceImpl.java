@@ -12,6 +12,7 @@ import com.example.carpark.entity.dto.parkinglot.ParkingLotCreationDTO;
 import com.example.carpark.entity.dto.parkinglot.ParkingLotDTO;
 import com.example.carpark.exception.custom.NotFoundException;
 import com.example.carpark.repository.ParkingLotRepository;
+import com.example.carpark.repository.custom.ParkingLotCustomRepository;
 import com.example.carpark.service.ParkingLotService;
 
 @Service
@@ -19,11 +20,13 @@ public class ParkingLotServiceImpl implements ParkingLotService {
   @Autowired
   private ParkingLotRepository repository;
   @Autowired
+  private ParkingLotCustomRepository parkingLotCustomRepository;
+  @Autowired
   private ModelMapper mapper;
 
   @Override
   public List<ParkingLotDTO> getParkingLotList(String searchName, String field, int offset, int limit) {
-    List<ParkingLot> parkingLots = repository.findAll();
+    List<ParkingLot> parkingLots = parkingLotCustomRepository.getAllParkingLots("%" + searchName + "%", field, offset, limit);
     return parkingLots.stream().map(p -> mapper.map(p, ParkingLotDTO.class)).collect(Collectors.toList());
   }
 

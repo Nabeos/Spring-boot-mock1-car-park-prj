@@ -12,6 +12,7 @@ import com.example.carpark.entity.dto.trip.TripCreationDTO;
 import com.example.carpark.entity.dto.trip.TripDTO;
 import com.example.carpark.exception.custom.NotFoundException;
 import com.example.carpark.repository.TripRepository;
+import com.example.carpark.repository.custom.TripCustomRepository;
 import com.example.carpark.service.TripService;
 
 @Service
@@ -19,11 +20,13 @@ public class TripServiceImpl implements TripService{
   @Autowired
   private TripRepository repository;
   @Autowired
+  private TripCustomRepository tripCustomRepository;
+  @Autowired
   private ModelMapper model;
 
   @Override
   public List<TripDTO> getTripList(String searchName, String field, int offset, int limit) {
-    List<Trip> trips = repository.findAll();
+    List<Trip> trips = tripCustomRepository.getAllTrips("%" + searchName + "%", field, offset, limit);
     return trips.stream().map(t -> model.map(t, TripDTO.class)).collect(Collectors.toList());
   }
 

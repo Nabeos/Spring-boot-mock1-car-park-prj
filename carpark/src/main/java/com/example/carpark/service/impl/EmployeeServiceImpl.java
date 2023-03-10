@@ -13,6 +13,7 @@ import com.example.carpark.entity.dto.employee.EmployeeDTO;
 import com.example.carpark.exception.custom.BadRequestCustomException;
 import com.example.carpark.exception.custom.NotFoundException;
 import com.example.carpark.repository.EmployeeRepository;
+import com.example.carpark.repository.custom.EmployeeCustomRepository;
 import com.example.carpark.service.EmployeeService;
 import com.example.carpark.utils.DateHelper;
 
@@ -20,6 +21,8 @@ import com.example.carpark.utils.DateHelper;
 public class EmployeeServiceImpl implements EmployeeService {
   @Autowired
   private EmployeeRepository repository;
+  @Autowired
+  private EmployeeCustomRepository employeeCustomRepository;
   @Autowired
   private ModelMapper model;
   private final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$";
@@ -44,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public List<EmployeeDTO> displayEmployeeList(String searchName, String field, int offset, int limit) {
     // convert entity to dto
-    return repository.findAllEmployee("%" + searchName + "%", field, offset, limit).stream()
+    return employeeCustomRepository.getAllEmployee("%" + searchName + "%", field, offset, limit).stream()
         .map(e -> model.map(e, EmployeeDTO.class)).collect(Collectors.toList());
   }
 

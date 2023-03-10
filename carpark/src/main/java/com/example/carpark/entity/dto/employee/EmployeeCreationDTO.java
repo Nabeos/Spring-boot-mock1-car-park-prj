@@ -12,8 +12,10 @@ public class EmployeeCreationDTO {
   @NotBlank(message = "DOB is mandatory")
   @Pattern(regexp = "(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/([19, 20]{2})?([0-9]{2})", message = "Invalid DOB, Must be dd/MM/yyyy format")
   private String employeeBirthdate;
+
   @NotBlank(message = "Gender is mandatory")
   @Size(min = 1, max = 1, message = "Must be 1 character")
+  @Pattern(regexp = "^(m|f)$", message = "Only one character m or f")
   private String sex;
   private String employeeAddress;
   private String email;

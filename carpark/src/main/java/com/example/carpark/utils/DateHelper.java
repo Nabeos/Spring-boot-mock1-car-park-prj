@@ -18,4 +18,19 @@ public class DateHelper {
     }
     return true;
   }
+
+  // whether startDate is less than endDate
+  public static boolean compareDeadline(String startDate, String endDate) {
+    SimpleDateFormat dfm = new SimpleDateFormat("dd/MM/yyyy");
+    dfm.setLenient(false);
+    try {
+      Date start = dfm.parse(startDate);
+      Date end = dfm.parse(endDate);
+      if (start.compareTo(end) > 0)
+        return false;
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return true;
+  }
 }

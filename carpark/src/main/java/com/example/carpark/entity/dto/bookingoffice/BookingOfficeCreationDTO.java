@@ -3,6 +3,7 @@ package com.example.carpark.entity.dto.bookingoffice;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public class BookingOfficeCreationDTO {
   @NotBlank(message = "Name is Mandatory")
@@ -17,8 +18,10 @@ public class BookingOfficeCreationDTO {
   @Min(value=0, message="Must be greater than 0")
   private double officePrice;
   @NotBlank(message = "Start deadline is mandatory")
+  @Pattern(regexp = "(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/([19, 20]{2})?([0-9]{2})", message = "Invalid date, Must be dd/MM/yyyy format")
   private String startContractDeadline;
   @NotBlank(message = "End deadline is mandatory")
+  @Pattern(regexp = "(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/([19, 20]{2})?([0-9]{2})", message = "Invalid date, Must be dd/MM/yyyy format")
   private String endContractDeadline;
 
   public BookingOfficeCreationDTO(String officeName, Long trip, String officePhone, String officePlace,
